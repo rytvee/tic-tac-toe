@@ -1,4 +1,4 @@
-# tic-tac-toe Game
+# Tic-Tac-Toe Game
 
 A simpe browser-based tic-tac-toe game built with HTML and JavaScript.
 
