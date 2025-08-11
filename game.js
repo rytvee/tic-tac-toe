@@ -28,11 +28,14 @@ modeToggle.addEventListener("click", () => {
   isComputerOpponent = !isComputerOpponent;
   modeToggle.textContent = isComputerOpponent ? "Mode: Vs Computer" : "Mode: 2 Players";
 
-  // Update Player O input immediately for clarity
   const nameOInput = document.getElementById("playerOName");
   nameOInput.value = isComputerOpponent ? "Computer" : "";
   nameOInput.disabled = isComputerOpponent;
+
+  // Reset the game board
+  restartMatch();
 });
+
 
 // ================================
 //         GAME INITIALIZATION
