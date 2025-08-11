@@ -1,0 +1,220 @@
+/* Base Styles */
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #222;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h3 {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+/* Input Section */
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap; /* Allows wrapping on smaller large screens */
+  margin-bottom: 15px;
+}
+
+.input div {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  padding: 10px 15px;
+  font-size: 16px;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+input:disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #00bcdd;
+  display: inline;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 150px;
+  box-sizing: border-box;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #009bb8;
+}
+
+.toggle-btn {
+  font-size: 14px;
+  padding: 10px 10px;
+}
+
+
+/* Scoreboard and Status */
+#scoreboard,
+#status {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* Game Board */
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 5px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #444;
+  font-size: 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.cell:hover {
+  background-color: #666;
+}
+
+/* Game Controls */
+#controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Tablet Devices (≤ 767px) */
+@media (max-width: 767px) {
+  .input {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .input > div {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+
+  #board {
+    grid-template-columns: repeat(3, 80px);
+    gap: 4px;
+  }
+
+  .cell {
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  #status {
+    font-size: 15px;
+  }
+
+  #scoreboard {
+    font-size: 15px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+    max-width: 150px;
+  }
+}
+
+/* Mobile Devices (≤ 480px) */
+@media (max-width: 480px) {
+  .input {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .input > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  #board {
+    grid-template-columns: repeat(3, 60px);
+    gap: 3px;
+  }
+
+  .cell {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  #status {
+    font-size: 14px;
+  }
+
+  #scoreboard {
+    font-size: 13px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+    width: 100%;
+    max-width: 200px;
+    box-sizing: border-box;
+  }
+
+  #controls {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+}
