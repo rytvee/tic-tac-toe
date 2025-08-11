@@ -44,5 +44,22 @@ The computer uses a basic strategy:
 
 ## 📌 Screenshots
 
+**index.html**
+
+<img width="1341" height="993" alt="image" src="https://github.com/user-attachments/assets/be72a98e-8bce-4b01-9191-558e9de9fc52" />
+
+**"2 players" game play mode**
+
+**"vs. computer" game play mode**
+<img width="1328" height="995" alt="image" src="https://github.com/user-attachments/assets/98084d58-0ee8-4f31-9bf8-d7747a07a185" />
+
+<img width="1338" height="993" alt="image" src="https://github.com/user-attachments/assets/94512e84-3849-4f14-afe8-8e6b89ddaaee" />
+
+<img width="1341" height="997" alt="image" src="https://github.com/user-attachments/assets/fd4ff086-5e71-4b1d-a6ea-19755f03763a" />
+
+
+
+
+
 ## 📜 License
 This project is licensed under the MIT License – free to use and modify.
