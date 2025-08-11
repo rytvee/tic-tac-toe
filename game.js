@@ -2,188 +2,327 @@
 //       DOM ELEMENTS & SETUP
 // ================================
 
-// Access HTML elements for board display, status message, and scoreboard
 const board = document.getElementById("board");
 const statusText = document.getElementById("status");
 const scoreboard = document.getElementById("scoreboard");
 
-// Game state variables
-let boardState = Array(9).fill(""); // Represents the current state of the 9 cells
-let cells = [];                     // Stores references to cell DOM elements
-let gameActive = false;             // Flag to track if game is ongoing
-let currentPlayer = "X";            // Tracks current player ("X" or "O")
+let isComputerOpponent = false; // default is 2 players
+let boardState = Array(9).fill("");
+let cells = [];
+let gameActive = false;
+let currentPlayer = "X";
 
-// Player names and scores
-let scoreX = "0";
-let scoreO = "0";
+let scoreX = 0;
+let scoreO = 0;
 let playerX = "playerX";
 let playerO = "playerO";
 
-// All possible winning combinations (horizontal, vertical, diagonal)
 const winningCombo = [
-    [0, 1, 2], [3, 4, 5], [6, 7, 8],    //Horizontal
-    [0, 3, 6], [1, 4, 7], [2, 5, 8],    //Vertical 
-    [0, 4, 8], [2, 4, 6]                //Diagonal
+  [0, 1, 2], [3, 4, 5], [6, 7, 8],    // Horizontal
+  [0, 3, 6], [1, 4, 7], [2, 5, 8],    // Vertical
+  [0, 4, 8], [2, 4, 6]                // Diagonal
 ];
+
+const modeToggle = document.getElementById("modeToggle");
+modeToggle.addEventListener("click", () => {
+  isComputerOpponent = !isComputerOpponent;
+  modeToggle.textContent = isComputerOpponent ? "Mode: Vs Computer" : "Mode: 2 Players";
+
+  // Update Player O input immediately for clarity
+  const nameOInput = document.getElementById("playerOName");
+  nameOInput.value = isComputerOpponent ? "Computer" : "";
+  nameOInput.disabled = isComputerOpponent;
+});
 
 // ================================
 //         GAME INITIALIZATION
 // ================================
 
-// Create the game board UI with 9 clickable cells
 function createBoard() {
-    board.innerHTML = "";
-    cells = [];
+  board.innerHTML = "";
+  cells = [];
 
-    for (let i = 0; i < 9; i++) {
-        const cell = document.createElement("div");
-        cell.classList.add("cell");
-        cell.dataset.index = i;
-        cell.addEventListener("click", handleMove);
-        cell.style.backgroundColor = "#444";
-        board.appendChild(cell);
-        cells.push(cell);
-    }
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement("div");
+    cell.classList.add("cell");
+    cell.dataset.index = i;
+    cell.addEventListener("click", handleMove);
+    cell.style.backgroundColor = "#444";
+    cell.textContent = ""; // clear
+    board.appendChild(cell);
+    cells.push(cell);
+  }
 }
 
-// Start a new game with names and initial scores
 function startGame() {
-    const nameXInput = document.getElementById("playerXName");
-    const nameOInput = document.getElementById("playerOName");
-    const nameX = nameXInput.value.trim();
-    const nameO = nameOInput.value.trim();
+  const nameXInput = document.getElementById("playerXName");
+  const nameOInput = document.getElementById("playerOName");
+  const nameError = document.getElementById("nameError");
+  const nameX = nameXInput.value.trim();
+  let nameO = nameOInput.value.trim();
 
-    // Set custom player names if provided
-    if (nameX) playerX = nameX;
-    if (nameO) playerO = nameO;
+  // Clear previous error
+  nameError.textContent = "";
 
-   // Disable name input to prevent changes mid-match
-   nameXInput.disabled = true;
-   nameOInput.disabled = true;
+  // Handle Computer Mode
+  if (isComputerOpponent) {
+    playerO = "Computer";
+    nameOInput.value = "Computer";
+    nameOInput.disabled = true;
+  } else {
+    if (!nameO) {
+      nameError.textContent = "Both players must enter a name.";
+      return;
+    }
+    playerO = nameO;
+    nameOInput.disabled = true;
+  }
 
-   // Initialize/reset game state
-    scoreX = 0;
-    scoreO = 0;
-    currentPlayer = "X";
-    gameActive = true;
-    boardState = Array(9).fill("");
-    updateScoreboard();
-    statusText.textContent = `${playerX}'s Turn (X)`;
-    
-    createBoard();
+  // Validate X
+  if (!nameX) {
+    nameError.textContent = "Both players must enter a name.";
+    return;
+  }
+
+  // Prevent same-name clash in 2-player mode
+  if (!isComputerOpponent && nameX.toLowerCase() === nameO.toLowerCase()) {
+    nameError.textContent = "Players must have different names.";
+    return;
+  }
+
+  playerX = nameX;
+  // playerO already set above
+
+  // Lock name inputs while match is on
+  nameXInput.disabled = true;
+  nameOInput.disabled = true;
+
+  // reset scores and state
+  scoreX = 0;
+  scoreO = 0;
+  currentPlayer = "X";
+  gameActive = true;
+  boardState = Array(9).fill("");
+
+  updateScoreboard();
+  statusText.textContent = `${playerX}'s Turn (X)`;
+  createBoard();
 }
 
 // ================================
 //            GAME LOGIC
 // ================================
 
-// Handle a player's move when a cell is clicked
 function handleMove(e) {
-    const index = e.target.dataset.index;
-    if (!gameActive || boardState[index] !== "") return;
+  const index = Number(e.target.dataset.index); // ensure number
+  if (!gameActive || boardState[index] !== "") return;
 
-    boardState[index] = currentPlayer;
-    cells[index].textContent = currentPlayer; //Writes X and O
+  // centralised move
+  makeMove(index, currentPlayer);
 
-    if (checkGameStatus(currentPlayer)) return;
+  if (checkGameStatus(currentPlayer)) return;
 
-     // Switch player turn
-    currentPlayer = currentPlayer === "X" ? "O" : "X";
-    statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+  // switch player
+  currentPlayer = currentPlayer === "X" ? "O" : "X";
+  statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+
+  // If computer mode and it's O's turn, let the computer play
+  if (isComputerOpponent && currentPlayer === "O" && gameActive) {
+    setTimeout(() => {
+      // double-check state before acting
+      if (gameActive && currentPlayer === "O") computerMove();
+    }, 500);
+  }
 }
 
-// Check for a win or draw condition
 function checkGameStatus(player) {
-    const winCombo = checkWinner(player);
+  const winCombo = checkWinner(player);
 
-    // Player wins
-    if (winCombo) {
-        gameActive = false;
-        winCombo.forEach(i => {
-            cells[i].style.backgroundColor = "#2ecc71";
-        });
+  if (winCombo) {
+    gameActive = false;
+    const winColor = player === "X" ? "#EA3D5E" : "#00A1FF";
 
-        if (player === "X") scoreX++;
-        else scoreO++;
+    winCombo.forEach(i => {
+      cells[i].style.backgroundColor = winColor;
+      cells[i].style.color = "#fff";
+      cells[i].style.textShadow = `0 0 12px ${winColor}, 0 0 24px ${winColor}`;
+    });
 
-        updateScoreboard();
+    if (player === "X") scoreX++;
+    else scoreO++;
 
-        statusText.textContent = `${getPlayerName(player)} wins this round!`;
+    updateScoreboard();
+    statusText.textContent = `${getPlayerName(player)} wins this round!`;
+    statusText.style.color = winColor;
+    statusText.style.textShadow = `0 0 6px ${winColor}`;
 
-        // Check for match win (first to 2 rounds)
-        if (scoreX === 2 || scoreO === 2) {
-            const winner = scoreX === 2 ? playerX : playerO;
-            statusText.textContent = `${winner} wins the match`;
-            gameActive = false;
-        }
-        return true;
+    if (scoreX === 2 || scoreO === 2) {
+      const winner = scoreX === 2 ? playerX : playerO;
+      statusText.textContent = `${winner} wins the match`;
+      statusText.style.color = "#FFD700"; // Gold
+      statusText.style.textShadow = "0 0 6px #FFD700, 0 0 12px #FFD700";
+      gameActive = false;
     }
 
-    // If all cells filled and no winner => draw
-    if (boardState.every(cell => cell !== "")) {
-        statusText.textContent = "It's a draw";
-        gameActive = false;
-        return true;
-    }
-    return false;
+    return true;
+  }
+
+  if (boardState.every(cell => cell !== "")) {
+    statusText.textContent = "It's a draw";
+    statusText.style.color = "#AAAAAA";
+    statusText.style.textShadow = "none";
+    gameActive = false;
+    return true;
+  }
+
+  return false;
 }
 
-// Check if current player has a winning combination
 function checkWinner(player) {
-    return winningCombo.find(([a, b, c]) => 
-        boardState[a] === player &&
-        boardState[b] === player &&
-        boardState[c] === player
-    );
+  return winningCombo.find(([a, b, c]) =>
+    boardState[a] === player &&
+    boardState[b] === player &&
+    boardState[c] === player
+  );
 }
 
-// Get player's display name by symbol
 function getPlayerName(symbol) {
-    return symbol === "X" ? playerX : playerO;
+  return symbol === "X" ? playerX : playerO;
 }
 
 // ================================
 //         SCORE & RESET
 // ================================
 
-// Update the scoreboard text
 function updateScoreboard() {
-    scoreboard.textContent = `${playerX} (X): ${scoreX} | ${playerO} (X): ${scoreO}`
+  scoreboard.textContent = `${playerX} (X): ${scoreX} | ${playerO} (O): ${scoreO}`;
 }
 
-// Reset the current game round, but keep the scores
 function resetGame() {
-    if (scoreX === 2 || scoreO === 2) {
-        statusText.textContent = "Match over! Click 'Restart Match' to play again";
-        return;
+  statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+  statusText.style.color = "#FFFFFF";
+  statusText.style.textShadow = "none";
+
+  if (scoreX === 2 || scoreO === 2) {
+    statusText.textContent = "Match over! Click 'Restart Match' to play again";
+    return;
+  }
+
+  boardState = Array(9).fill("");
+  gameActive = true;
+  currentPlayer = "X";
+  statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+  createBoard();
+
+  // Keep names disabled between rounds
+  document.getElementById("playerXName").disabled = true;
+  document.getElementById("playerOName").disabled = true;
+}
+
+function makeMove(index, player) {
+  // centralised move setter
+  boardState[index] = player;
+  cells[index].textContent = player;
+
+  if (player === "X") {
+    cells[index].style.color = "#EA3D5E";
+    cells[index].style.textShadow = "0 0 10px #EA3D5E, 0 0 20px #EA3D5E";
+  } else {
+    cells[index].style.color = "#00A1FF";
+    cells[index].style.textShadow = "0 0 10px #00A1FF, 0 0 20px #00A1FF";
+  }
+}
+
+function computerMove() {
+  // smarter-but-readable AI (win -> block -> center -> corners -> sides)
+
+  function findBestMove(symbol) {
+    for (let i = 0; i < boardState.length; i++) {
+      if (boardState[i] === "") {
+        boardState[i] = symbol;
+        const wouldWin = Boolean(checkWinner(symbol));
+        boardState[i] = "";
+        if (wouldWin) return i;
+      }
     }
-    boardState = Array(9).fill("");
-    gameActive = true;
-    currentPlayer = "X";
-    statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})` ;
-    createBoard();
-}
+    return null;
+  }
 
-// Completely restart the match, reset scores and re-enable name inputs
-function restartMatch() {
-    // Re-enable name inputs for new players
-    document.getElementById("playerXName").disabled = false;
-    document.getElementById("playerOName").disabled = false;
-
-    scoreX = 0;
-    scoreO = 0;
+  // 1. Win if possible
+  let move = findBestMove("O");
+  if (move !== null) {
+    makeMove(move, "O");
+    if (checkGameStatus("O")) return;
     currentPlayer = "X";
-    gameActive = true;
-    boardState = Array(9).fill("");
-    updateScoreboard();
     statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
-    createBoard();
+    return;
+  }
+
+  // 2. Block player
+  move = findBestMove("X");
+  if (move !== null) {
+    makeMove(move, "O");
+    if (checkGameStatus("O")) return;
+    currentPlayer = "X";
+    statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+    return;
+  }
+
+  // 3. Center
+  if (boardState[4] === "") {
+    makeMove(4, "O");
+    if (checkGameStatus("O")) return;
+    currentPlayer = "X";
+    statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+    return;
+  }
+
+  // 4. Corner
+  const corners = [0, 2, 6, 8].filter(i => boardState[i] === "");
+  if (corners.length) {
+    move = corners[Math.floor(Math.random() * corners.length)];
+    makeMove(move, "O");
+    if (checkGameStatus("O")) return;
+    currentPlayer = "X";
+    statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+    return;
+  }
+
+  // 5. Sides
+  const sides = [1, 3, 5, 7].filter(i => boardState[i] === "");
+  if (sides.length) {
+    move = sides[Math.floor(Math.random() * sides.length)];
+    makeMove(move, "O");
+    if (checkGameStatus("O")) return;
+    currentPlayer = "X";
+    statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+    return;
+  }
 }
 
+function restartMatch() {
+  statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+  statusText.style.color = "#FFFFFF";
+  statusText.style.textShadow = "none";
+
+  // Allow changing Player X name; keep Player O disabled if computer mode
+  document.getElementById("playerXName").disabled = false;
+  document.getElementById("playerOName").disabled = isComputerOpponent;
+  if (isComputerOpponent) document.getElementById("playerOName").value = "Computer";
+
+  scoreX = 0;
+  scoreO = 0;
+  currentPlayer = "X";
+  gameActive = true;
+  boardState = Array(9).fill("");
+
+  updateScoreboard();
+  statusText.textContent = `${getPlayerName(currentPlayer)}'s Turn (${currentPlayer})`;
+  createBoard();
+}
 
 // ================================
 //       INITIAL BOARD SETUP
 // ================================
 
-// Prepare the empty board on page load
 createBoard();
