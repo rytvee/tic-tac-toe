@@ -57,4 +57,4 @@ The computer uses a basic strategy:
 
 
 ## 📜 License
-This project is licensed under the MIT License – free to use and modify.
+This project is free to use and modify.
