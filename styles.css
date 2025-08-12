@@ -63,13 +63,18 @@ button {
   transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #009bb8;
+button:hover, button:not(:disabled):hover {
+  background-color: #009bb8 !important;
 }
 
 .toggle-btn {
   font-size: 14px;
   padding: 10px 10px;
+}
+
+button:disabled{
+  background-color: #999999 !important;
+  cursor: not-allowed;
 }
 
 
