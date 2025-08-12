@@ -19,15 +19,8 @@ tic-tac-toe/
 │── index.html        # Main game layout
 │── style.css         # Styling for the game board & UI
 │── game.js           # Game logic (players, computer AI, score)
-└── images/           # Icon
+└── images/           # Icon, game play gif
 ```
-
-## 🛠 Installation & Setup
-1. Clone the repository
-   `git clone https://github.com/your-username/tic-tac-toe.git`
-   `cd tic-tac-toe`
-2. Run locally
-   Simply open `index.html` in your browser.
 
 ## 🎮 How to Play
 1. Choose Game Mode – Select 2 Player or Vs Computer.
@@ -42,7 +35,7 @@ The computer uses a basic strategy:
 - Blocks your winning moves.
 - Chooses the best available space.
 
-## 📌 Game Play
+## 🎮 Game Play
 
 **"2-Players" mode**
 ![2-Players Mode](images/2-players-mode.gif)
@@ -52,8 +45,6 @@ The computer uses a basic strategy:
 
 **Start, restart and end match**
 ![2-Players Mode](images/start-restart-end.gif)
-
-
 
 
 ## 📜 License
