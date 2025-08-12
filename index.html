@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tic Tac Toe</title>
   <link rel="stylesheet" href="styles.css" />
-  <link rel="icon" href="images/favicon-(4).ico" />
+  <link rel="icon" href="images/favicon.ico" />
 </head>
 <body>
 
@@ -19,7 +19,7 @@
         <input type="text" placeholder="Player X" id="playerXName" />
       <input type="text" placeholder="Player O" id="playerOName" />
       </div>
-      <button onclick="startGame()">Start Match</button>
+      <button id="startMatch" onclick="startGame()">Start Match</button>
     </div>
     <p id="nameError" style="color: red; font-size: 14px; margin: 5px 0;"></p>
 
@@ -29,8 +29,8 @@
     <div id="board"></div>
 
     <div id="controls">
-      <button onclick="resetGame()">Next Round</button>
-      <button onclick="restartMatch()">Restart Match</button>
+      <button id="nextRoundBtn" onclick="resetGame()" disabled>Next Round</button>
+      <button id="restartMatchBtn" onclick="restartMatch()" disabled>Restart Match</button>
     </div>
 
   </div>
