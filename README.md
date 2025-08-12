@@ -6,10 +6,10 @@ Features 2-player mode and play against the computer with smart move logic.
 Play it here:
 [Tic Tac Toe Live](https://rytvee.github.io/tic-tac-toe/)
 
-## 📌 Features
+## ✨ Features
 - ✅ 2 Player Mode – Play with a friend on the same device.
 - 🤖 Computer Mode – Challenge an AI opponent.
-- 🎨 Responsive Design – Works on desktop and mobile.
+- 📱 Responsive Design – Works on desktop and mobile.
 - 🔄 Restart & Next Round – Continue playing without reloading.
 - 🏆 Score Tracking – Keeps track of wins and draws.
 
@@ -22,7 +22,7 @@ tic-tac-toe/
 └── images/           # Icon, game play gif
 ```
 
-## 🎮 How to Play
+## 📋 How to Play
 1. Choose Game Mode – Select 2 Player or Vs Computer.
 2. Enter Player Names (if in 2 Player mode).
 3. Start Playing – Take turns clicking empty cells.
@@ -35,7 +35,7 @@ The computer uses a basic strategy:
 - Blocks your winning moves.
 - Chooses the best available space.
 
-## 🎮 Game Play
+## 🖥️ Gameplay
 
 **"2-Players" mode**
 
