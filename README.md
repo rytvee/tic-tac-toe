@@ -44,8 +44,7 @@ The computer uses a basic strategy:
 
 ## 📌 Game Play
 
-**"2 players" mode**
-images/2-players-mode.gif
+![2-Players Mode](images/2-players-mode.gif)
 
 **"vs. computer" mode**
 
