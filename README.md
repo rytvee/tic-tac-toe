@@ -44,12 +44,14 @@ The computer uses a basic strategy:
 
 ## 📌 Game Play
 
+**"2-Players" mode**
 ![2-Players Mode](images/2-players-mode.gif)
 
 **"vs. computer" mode**
+![2-Players Mode](images/vs-computer-mode.gif)
 
 **Start, restart and end match**
-
+![2-Players Mode](images/start-restart-end.gif)
 
 
 
