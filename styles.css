@@ -132,7 +132,6 @@ button:disabled{
     display: flex;
     gap: 10px;
     justify-content: center;
-    margin-bottom: 10px;
   }
 
   #board {
@@ -186,13 +185,13 @@ button:disabled{
   }
 
   #board {
-    grid-template-columns: repeat(3, 60px);
-    gap: 3px;
+    grid-template-columns: repeat(3, 80px);
+    gap: 4px;
   }
 
   .cell {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     font-size: 28px;
   }
 
@@ -212,7 +211,7 @@ button:disabled{
   button {
     font-size: 14px;
     width: 100%;
-    max-width: 200px;
+    max-width: 300px;
     box-sizing: border-box;
   }
 
@@ -223,3 +222,18 @@ button:disabled{
     align-items: center;
   }
 }
+
+@media (max-width: 280px) {
+  #board {
+    grid-template-columns: repeat(3, 60px);
+    gap: 3px;
+  }
+
+  .cell {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+}
+
+
