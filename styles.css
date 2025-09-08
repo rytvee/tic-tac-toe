@@ -1,93 +1,241 @@
+/* Base Styles */
 *{
   -webkit-tap-highlight-color: transparent; /* Remove blue tap highlight on iOS & Android */
   -webkit-touch-callout: none; /* Remove blue tap highlight on iOS long-press menu */
 }
 body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #222;
+  color: #fff;
   margin: 0;
   padding: 0;
-  height: 100%;
-  background: #111;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-}
-
-canvas {
-  background: #000;
-  border: 2px solid #fff;
-  width: 100%;
-  max-width: 800px;
-  height: 80vh;
-  margin: 20px auto;
-  display: block;
-  box-sizing: border-box;
-}
-
-/* Main control wrapper */
-#controlBtns {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-/* Pause and Arrow Buttons */
-#pauseBtn,
-#mobileControls button {
-  padding: 10px 16px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  background-color: #4285F4;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.25s ease, transform 0.1s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Hover Effect */
-#pauseBtn:hover,
-#mobileControls button:hover {
-  background-color: #3367D6;
-}
-
-#pauseBtn:active,
-#mobileControls button:active {
-  background-color: #2A56C6; /* Darker when pressed */
-  transform: scale(0.96);
-}
-
-#leftBtn,
-#rightBtn,
-#pauseBtn {
-  width: 120px;
   text-align: center;
 }
 
-/* Arrow Buttons Row */
-#mobileControls {
+.container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+h3 {
+  margin-top: 20px;
+  font-size: 24px;
+}
+
+/* Input Section */
+.input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap; /* Allows wrapping on smaller large screens */
+  margin-bottom: 15px;
+}
+
+.input div {
+  display: flex;
+  gap: 10px;
+}
+
+input {
+  padding: 10px 15px;
+  font-size: 16px;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+input:disabled {
+  background-color: #eee;
+  color: #999;
+  cursor: not-allowed;
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #00bcdd;
+  display: inline;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 150px;
+  box-sizing: border-box;
+  transition: background-color 0.3s;
+}
+
+button:hover, button:not(:disabled):hover {
+  background-color: #009bb8 !important;
+}
+
+.toggle-btn {
+  font-size: 14px;
+  padding: 10px 10px;
+}
+
+button:disabled{
+  background-color: #999999 !important;
+  cursor: not-allowed;
+}
+
+
+/* Scoreboard and Status */
+#scoreboard,
+#status {
+  margin: 10px 0;
+  font-size: 16px;
+}
+
+/* Game Board */
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  gap: 5px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background-color: #444;
+  font-size: 48px;
   display: flex;
   justify-content: center;
-  gap: 12px;
+  align-items: center;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
-#mobileControls button:disabled {
-  background-color: #999;
-  cursor: not-allowed;
-  opacity: 0.6;
+.cell:hover {
+  background-color: #666;
 }
 
-#leftBtn,
-#rightBtn {
-  display: none;
+/* Game Controls */
+#controls {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
 }
 
+/* Tablet Devices (≤ 767px) */
+@media (max-width: 767px) {
+  .input {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .input > div {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  #board {
+    grid-template-columns: repeat(3, 80px);
+    gap: 4px;
+  }
+
+  .cell {
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+  }
+
+  h3 {
+    font-size: 22px;
+  }
+
+  #status {
+    font-size: 15px;
+  }
+
+  #scoreboard {
+    font-size: 15px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+    max-width: 150px;
+  }
+}
+
+/* Mobile Devices (≤ 480px) */
 @media (max-width: 480px) {
-  #leftBtn,
-  #rightBtn,
-  #pauseBtn {
-    width: 115px;
+  .input {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .input > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .container {
+    padding: 10px;
+  }
+
+  #board {
+    grid-template-columns: repeat(3, 80px);
+    gap: 4px;
+  }
+
+  .cell {
+    width: 80px;
+    height: 80px;
+    font-size: 28px;
+  }
+
+  h3 {
+    font-size: 20px;
+  }
+
+  #status {
+    font-size: 14px;
+  }
+
+  #scoreboard {
+    font-size: 13px;
+  }
+
+  input,
+  button {
+    font-size: 14px;
+    width: 100%;
+    max-width: 300px;
+    box-sizing: border-box;
+  }
+
+  #controls {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    align-items: center;
+  }
+}
+
+@media (max-width: 280px) {
+  #board {
+    grid-template-columns: repeat(3, 60px);
+    gap: 3px;
+  }
+
+  .cell {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
   }
 }
