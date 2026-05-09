@@ -9,6 +9,8 @@ Play it here:
 ## Features
 - 2 Player Mode – Play with a friend on the same device.
 - Computer Mode – Challenge an AI opponent.
+- Infinte Game Play – Game goes on with no draw until a player wins
+- Win/Draw – Game either ends with either a win or draw
 - Responsive Design – Works on desktop and mobile.
 - Restart & Next Round – Continue playing without reloading.
 - Score Tracking – Keeps track of wins and draws.
