@@ -13,11 +13,15 @@
 
     <h3>Tic Tac Toe</h3>
 
+    <div class="state">
+        <button id="modeToggle">Mode: 2 Players</button>
+        <button id="gameTypeToggle">Game Type: Win/Draw</button>
+      </div>
+
     <div class="input">
-      <button id="modeToggle" class="toggle-btn">Mode: 2 Players</button>
       <div>
         <input type="text" placeholder="Player X" id="playerXName" />
-      <input type="text" placeholder="Player O" id="playerOName" />
+        <input type="text" placeholder="Player O" id="playerOName" />
       </div>
       <button id="startMatch" onclick="startGame()">Start Match</button>
     </div>
