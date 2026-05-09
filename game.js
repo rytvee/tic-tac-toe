@@ -1,4 +1,27 @@
 // ================================
+//        GAME TYPE MODE
+// ================================
+let isInfiniteMode = false;
+
+// Tracks moves in infinite mode
+let moveHistory = {
+  X: [],
+  O: []
+};
+
+const gameTypeToggle = document.getElementById("gameTypeToggle");
+
+gameTypeToggle.addEventListener("click", () => {
+  isInfiniteMode = !isInfiniteMode;
+
+  gameTypeToggle.textContent = isInfiniteMode
+    ? "Game Type: Infinite"
+    : "Game Type: Win/Draw";
+
+  restartMatch();
+});
+
+// ================================
 //       DOM ELEMENTS & SETUP
 // ================================
 const board = document.getElementById("board");
@@ -259,6 +282,7 @@ function checkGameStatus(player) {
       startEndMatchBtn.textContent = "Start Match";
       matchStarted = false;
     } else {
+      
       nextRoundBtn.disabled = false;
       nextRoundBtn.style.backgroundColor = "#00bcdd";
       restartMatchBtn.disabled = false;
@@ -267,7 +291,7 @@ function checkGameStatus(player) {
     return true;
   }
 
-  if (boardState.every(cell => cell !== "")) {
+ if (!isInfiniteMode && boardState.every(cell => cell !== "")) {
     statusText.textContent = "It's a draw";
     statusText.style.color = "#AAAAAA";
     statusText.style.textShadow = "none";
@@ -276,8 +300,8 @@ function checkGameStatus(player) {
     nextRoundBtn.disabled = false;
     restartMatchBtn.disabled = false;
 
-    document.getElementById("playerXName").disabled = false;
-    document.getElementById("playerOName").disabled = false;
+    document.getElementById("playerXName").disabled = true;
+    document.getElementById("playerOName").disabled = true;
 
     return true;
   }
@@ -315,6 +339,11 @@ function resetGame() {
   gameActive = true;
   currentPlayer = "X";
 
+  moveHistory = {
+    X: [],
+    O: []
+  };
+
   updateScoreboard();
   createBoard();
 
@@ -336,6 +365,25 @@ function makeMove(index, player) {
   } else {
     cells[index].style.color = "#00A1FF";
     cells[index].style.textShadow = "0 0 10px #00A1FF, 0 0 20px #00A1FF";
+  }
+
+  // ================================
+  //       INFINITE MODE LOGIC
+  // ================================
+  if (isInfiniteMode) {
+    moveHistory[player].push(index);
+
+    // If player has more than 3 moves,
+    // remove the oldest move
+    if (moveHistory[player].length > 3) {
+      const oldestIndex = moveHistory[player].shift();
+
+      boardState[oldestIndex] = "";
+      cells[oldestIndex].textContent = "";
+      cells[oldestIndex].style.backgroundColor = "#444";
+      cells[oldestIndex].style.color = "";
+      cells[oldestIndex].style.textShadow = "";
+    }
   }
 }
 
@@ -403,16 +451,27 @@ function restartMatch() {
   scoreX = 0;
   scoreO = 0;
   currentPlayer = "X";
-  gameActive = true;
+
+  // Prevent gameplay until Start Match
+  gameActive = false;
+
   boardState = Array(9).fill("");
 
-  restartMatchBtn.disabled = false;
+  moveHistory = {
+    X: [],
+    O: []
+  };
+
+  restartMatchBtn.disabled = true;
   nextRoundBtn.disabled = true;
 
   updateScoreboard();
   createBoard();
 
-  statusText.textContent = `${playerX}'s Turn (X)`;
+  statusText.textContent = isComputerOpponent
+    ? "Enter player name and start match"
+    : "Enter player names and start match";
+
   statusText.style.color = "#FFFFFF";
   statusText.style.textShadow = "none";
 }
@@ -421,3 +480,4 @@ function restartMatch() {
 //       INITIAL BOARD SETUP
 // ================================
 createBoard();
+gameActive = false;
